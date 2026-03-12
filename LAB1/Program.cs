@@ -1,95 +1,129 @@
 ﻿using System;
 
-abstract class Document
+namespace DocumentFactoryMethodSystem
 {
-    public string Name { get; }
-
-    protected Document(string name)
+    abstract class Document
     {
-        Name = name;
+        public abstract void Open();
+        public abstract void Save();
+        public abstract void Close();
     }
 
-    public abstract void Open();
-    public abstract void Save();
-    public abstract void Close();
-}
-
-// Конкретные классы документов
-class WordDocument : Document
-{
-    public WordDocument(string name) : base(name) { }
-
-    public override void Open() => Console.WriteLine($"Открытие Word документа: {Name}");
-    public override void Save() => Console.WriteLine($"Сохранение Word документа: {Name}");
-    public override void Close() => Console.WriteLine($"Закрытие Word документа: {Name}");
-}
-
-class PdfDocument : Document
-{
-    public PdfDocument(string name) : base(name) { }
-
-    public override void Open() => Console.WriteLine($"Открытие PDF документа: {Name}");
-    public override void Save() => Console.WriteLine($"Сохранение PDF документа: {Name}");
-    public override void Close() => Console.WriteLine($"Закрытие PDF документа: {Name}");
-}
-
-class ExcelDocument : Document
-{
-    public ExcelDocument(string name) : base(name) { }
-
-    public override void Open() => Console.WriteLine($"Открытие Excel документа: {Name}");
-    public override void Save() => Console.WriteLine($"Сохранение Excel документа: {Name}");
-    public override void Close() => Console.WriteLine($"Закрытие Excel документа: {Name}");
-}
-enum DocumentType
-{
-    Word,
-    Pdf,
-    Excel
-}
-
-// Фабрика документов порождающий паттерн
-static class DocumentFactory
-{
-    public static Document CreateDocument(DocumentType type, string name)
+    class WordDocument : Document
     {
-        switch (type)
+        public override void Open()
         {
-            case DocumentType.Word:
-                return new WordDocument(name);
-            case DocumentType.Pdf:
-                return new PdfDocument(name);
-            case DocumentType.Excel:
-                return new ExcelDocument(name);
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), "Неизвестный тип документа");
+            Console.WriteLine("Открыт Word-документ");
+        }
+
+        public override void Save()
+        {
+            Console.WriteLine("Сохранён Word-документ");
+        }
+
+        public override void Close()
+        {
+            Console.WriteLine("Закрыт Word-документ");
         }
     }
-}
 
-// Пример использования
-class Program
-{
-    static void Main(string[] args)
+    class PdfDocument : Document
     {
-        Document doc1 = DocumentFactory.CreateDocument(DocumentType.Word, "Отчёт.docx");
-        Document doc2 = DocumentFactory.CreateDocument(DocumentType.Pdf, "Презентация.pdf");
-        Document doc3 = DocumentFactory.CreateDocument(DocumentType.Excel, "Таблица.xlsx");
+        public override void Open()
+        {
+            Console.WriteLine("Открыт PDF-документ");
+        }
 
-        doc1.Open();
-        doc1.Save();
-        doc1.Close();
+        public override void Save()
+        {
+            Console.WriteLine("Сохранён PDF-документ");
+        }
 
-        Console.WriteLine();
+        public override void Close()
+        {
+            Console.WriteLine("Закрыт PDF-документ");
+        }
+    }
 
-        doc2.Open();
-        doc2.Save();
-        doc2.Close();
+    class ExcelDocument : Document
+    {
+        public override void Open()
+        {
+            Console.WriteLine("Открыт Excel-документ");
+        }
 
-        Console.WriteLine();
+        public override void Save()
+        {
+            Console.WriteLine("Сохранён Excel-документ");
+        }
 
-        doc3.Open();
-        doc3.Save();
-        doc3.Close();
+        public override void Close()
+        {
+            Console.WriteLine("Закрыт Excel-документ");
+        }
+    }
+
+    // Creator
+    abstract class DocumentCreator
+    {
+        public abstract Document FactoryMethod();
+    }
+
+    // ConcreteCreatorA
+    class WordDocumentCreator : DocumentCreator
+    {
+        public override Document FactoryMethod()
+        {
+            return new WordDocument();
+        }
+    }
+
+    // ConcreteCreatorB
+    class PdfDocumentCreator : DocumentCreator
+    {
+        public override Document FactoryMethod()
+        {
+            return new PdfDocument();
+        }
+    }
+
+    // ConcreteCreatorC
+    class ExcelDocumentCreator : DocumentCreator
+    {
+        public override Document FactoryMethod()
+        {
+            return new ExcelDocument();
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            DocumentCreator creator;
+            Document document;
+
+            creator = new WordDocumentCreator();
+            document = creator.FactoryMethod();
+            document.Open();
+            document.Save();
+            document.Close();
+
+            Console.WriteLine();
+
+            creator = new PdfDocumentCreator();
+            document = creator.FactoryMethod();
+            document.Open();
+            document.Save();
+            document.Close();
+
+            Console.WriteLine();
+
+            creator = new ExcelDocumentCreator();
+            document = creator.FactoryMethod();
+            document.Open();
+            document.Save();
+            document.Close();
+        }
     }
 }
