@@ -1,8 +1,5 @@
 ﻿using System;
 
-//
-// Базовый абстрактный класс документа
-//
 abstract class Document
 {
     public string Name { get; }
@@ -17,9 +14,7 @@ abstract class Document
     public abstract void Close();
 }
 
-//
 // Конкретные классы документов
-//
 class WordDocument : Document
 {
     public WordDocument(string name) : base(name) { }
@@ -46,10 +41,6 @@ class ExcelDocument : Document
     public override void Save() => Console.WriteLine($"Сохранение Excel документа: {Name}");
     public override void Close() => Console.WriteLine($"Закрытие Excel документа: {Name}");
 }
-
-//
-// Перечисление типов документов
-//
 enum DocumentType
 {
     Word,
@@ -57,9 +48,7 @@ enum DocumentType
     Excel
 }
 
-//
-// Фабрика документов (порождающий паттерн)
-//
+// Фабрика документов порождающий паттерн
 static class DocumentFactory
 {
     public static Document CreateDocument(DocumentType type, string name)
@@ -78,9 +67,7 @@ static class DocumentFactory
     }
 }
 
-//
 // Пример использования
-//
 class Program
 {
     static void Main(string[] args)
